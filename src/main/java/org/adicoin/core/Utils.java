@@ -82,5 +82,28 @@ public class Utils {
             buf[i] = bytes[bytes.length - 1 - i];
         return buf;
     }
+    
+    /* Methods to read Unsigned Integer 32 bytes in Little Endian (Default) and Big Endian */
+    public static long readUint32(byte[] bytes, int offset) {
+        return ((bytes[offset++] & 0xFFL) <<  0) |
+               ((bytes[offset++] & 0xFFL) <<  8) |
+               ((bytes[offset++] & 0xFFL) << 16) |
+               ((bytes[offset] & 0xFFL) << 24);
+    }
+    
+    public static long readUint32BE(byte[] bytes, int offset) {
+        return ((bytes[offset + 0] & 0xFFL) << 24) |
+               ((bytes[offset + 1] & 0xFFL) << 16) |
+               ((bytes[offset + 2] & 0xFFL) <<  8) |
+               ((bytes[offset + 3] & 0xFFL) <<  0);
+    }
+    
+    
+    public static void uint32ToByteStreamLE(long val, OutputStream stream) throws IOException {
+        stream.write((int)(0xFF & (val >>  0)));
+        stream.write((int)(0xFF & (val >>  8)));
+        stream.write((int)(0xFF & (val >> 16)));
+        stream.write((int)(0xFF & (val >> 24)));
+    }
 
 }
