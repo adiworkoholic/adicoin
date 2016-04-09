@@ -5,27 +5,26 @@ import java.util.Arrays;
 import org.apache.commons.codec.binary.Base64;
 
 /**
- * 
- * @author aditya
- *
- */
-/**
  * @author aditya
  *
  */
 public class Address {
+    private int version;
 	private byte[] bytes;
 
-	public Address(byte[] bytes) {
-		this.bytes = bytes;
+	public Address(AdiCoinNetworkConfig config, byte[] hash160) {
+		if (hash160.length != 20)
+			throw new RuntimeException("Invalid length. Must be 20 bytes");
+		this.version = config.addressHeader;
+		this.bytes = hash160;
 	}
 	
-	public Address(String address) throws AddressFormatException {
-		this.bytes = checkAndDecode(address);
+	public Address(AdiCoinNetworkConfig config, String coinAddress) throws AddressFormatException {
+		this.bytes = checkAndDecode(coinAddress);
 	}
 
 	private byte[] checkAndDecode(String address) throws AddressFormatException {
-		byte[] encoded = Base64.decodeBase64(address);
+		byte[] encoded = Base64.decodeBase64(address); // Using Base64 for now. To be changed to Base58 Encoding
 		byte[] checksum = new byte[4];
 		System.arraycopy(encoded, 20, checksum, 0, 4);
 		byte[] addressBytes = new byte[20];
@@ -51,20 +50,23 @@ public class Address {
 	}
 	
 	
-	public byte[] getHash160() {
+	public byte[] getPubKeyHashBytes() {
 		return bytes;
 	}
 
 	@Override
 	public String toString() {
+		int versionBytesLength = 1;
 		int addressBytesLength = 20;
 		int checksumBytesLength = 4;
-		byte[] addressBytes = new byte[addressBytesLength + checksumBytesLength ];
-		System.arraycopy(this.bytes, 0, addressBytes, 0, 20);
-		byte[] checksum = Utils.doubleSHA256Digest(addressBytes, 0, 20);
-		System.arraycopy(checksum, 0, addressBytes, 20, 4);
+		byte[] addressBytes = new byte[versionBytesLength + addressBytesLength + checksumBytesLength ];
+        addressBytes[0] = (byte)version;
 
-		return Base64.encodeBase64String(addressBytes);
+		System.arraycopy(this.bytes, 0, addressBytes, 1, 20);
+		byte[] checksum = Utils.doubleSHA256Digest(addressBytes, 0, 21);
+		System.arraycopy(checksum, 0, addressBytes, 21, 4);
+
+		return Base64.encodeBase64String(addressBytes); // Using Base64 for now. To be changed to Base58 Encoding
 	}
 
 }

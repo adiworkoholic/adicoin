@@ -1,5 +1,7 @@
 package org.adicoin.core;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -35,6 +37,9 @@ public class Utils {
 		return out;
     }
     
+    public static byte[] doubleSHA256Digest(byte[] input) {
+        return doubleSHA256Digest(input, 0, input.length);
+    }
     
     public static byte[] doubleSHA256Digest(byte[] input, int offset, int length) {
         try {
@@ -69,6 +74,13 @@ public class Utils {
             buf.append(s);
         }
         return buf.toString();
+    }
+    
+    public static byte[] reverseBytes(byte[] bytes) {
+        byte[] buf = new byte[bytes.length];
+        for (int i = 0; i < bytes.length; i++)
+            buf[i] = bytes[bytes.length - 1 - i];
+        return buf;
     }
 
 }
