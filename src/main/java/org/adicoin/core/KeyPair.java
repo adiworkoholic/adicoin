@@ -44,9 +44,9 @@ public class KeyPair implements Serializable {
 	/**
 	 * Returns the address that corresponds to the public part of this ECKey. 
 	 */
-	public Address toAddress() {
+	public Address toAddress(AdiCoinNetworkConfig config) {
 	    byte[] hash160 = Utils.sha256hash160(ecKey.getPubKey());
-	    return new Address(hash160);
+	    return new Address(config, hash160);
 	}
     
     public String toString() {
