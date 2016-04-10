@@ -2,11 +2,32 @@ package org.adicoin.core;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Block extends Message {
+    private static final Logger log = LoggerFactory.getLogger(Block.class);
 
 	private static final long serialVersionUID = -2497440265918156052L;
 
+    public static final int BLOCK_HEADER_SIZE = 80;
+
+    private long version;
+    private HashAsBinary prevBlockHash;
+    private HashAsBinary merkleRoot;
+    private long time;
+    private long difficultyTarget;  // "nBits"
+
+    private long nonce;
+
+    List<Transaction> transactions; // null indicates that it currently only holders the block header
+    
+    private transient HashAsBinary hash; // Hash of this block
+    
 	public Block(AdiCoinNetworkConfig config) {
 		super(config);
 	}
@@ -22,5 +43,145 @@ public class Block extends Message {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	private void writeHeader(OutputStream stream) {
+    	throw new RuntimeException("Not Implemented Yet!");
+
+	}
+	
+
+    /**
+     * Returns the hash of the block (which for a valid, solved block should be below the target). Big endian.
+     */
+    public HashAsBinary getHash() {
+        if (hash == null)
+            hash = calculateBlockHash();
+        return hash;
+    }
+    
+    public BigInteger getWork() {
+    	throw new RuntimeException("Not Implemented Yet!");
+    }
+    
+    public Block getHeaderOnly() {
+    	throw new RuntimeException("Not Implemented Yet!");
+    }
+    
+    /* Solve the block - find nonce that makes the block hash lower than the difficultyTarget */
+    public void mineMe() {
+    	throw new RuntimeException("Not Implemented Yet!");
+    }
+	
+    private boolean verifyTimeStamp() throws VerificationException {
+    	throw new RuntimeException("Not Implemented Yet!");
+
+    }
+    private boolean verifyProofofWork() throws VerificationException {
+    	throw new RuntimeException("Not Implemented Yet!");
+
+    }
+    private void verifyMerkleRoot() throws VerificationException {
+    	throw new RuntimeException("Not Implemented Yet!");
+
+    }
+    private boolean verifyTransactions() throws VerificationException {
+    	// Check that ONLY the first transaction in this block is coinbase transaction
+    	throw new RuntimeException("Not Implemented Yet!");
+
+    }
+
+    
+    public void verify() throws VerificationException {
+    	verifyProofofWork();
+    	verifyTimeStamp();
+    	
+    	if(transactions != null) {
+    		verifyTransactions();
+    		verifyMerkleRoot();
+    	}
+    }
+	private HashAsBinary calculateBlockHash() {
+    	throw new RuntimeException("Not Implemented Yet!");
+
+	}
+	
+	private HashAsBinary calculateMerkleRoot() {
+    	throw new RuntimeException("Not Implemented Yet!");
+	}
+	
+	
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Block)) return false;
+        Block other = (Block) o;
+        return getHash().equals(other.getHash());
+    }
+
+    @Override
+    public int hashCode() {
+        return getHash().hashCode();
+    }
+    
+    
+    
+    /* Getters and Setters */
+    /** Returns the merkle root in big endian form, calculating it from transactions if necessary. */
+    public HashAsBinary getMerkleRoot() {
+        if (merkleRoot == null)
+            merkleRoot = calculateMerkleRoot();
+        return merkleRoot;
+    }
+	
+    /** Returns the version of the block data structure as defined by the BitCoin protocol. */
+    public long getVersion() {
+        return version;
+    }
+
+    /** Returns the hash of the previous block in the chain, as defined by the block header. */
+    public HashAsBinary getPrevBlockHash() {
+        return prevBlockHash;
+    }
+
+    void setPrevBlockHash(HashAsBinary prevBlockHash) {
+        this.prevBlockHash = prevBlockHash;
+        this.hash = null;
+    }
+
+    /** Returns the time at which the block was solved and broadcast, according to the clock of the solving node. */
+    public long getTime() {
+        return time;
+    }
+
+    void setTime(long time) {
+        this.time = time;
+        this.hash = null;
+    }
+
+    /**
+     * Returns the difficulty of the proof of work that this block should meet encoded in compact form. The
+     * {@link BlockChain} verifies that this is not too easy by looking at the length of the chain when the block is
+     * added. To find the actual value the hash should be compared against, use getDifficultyTargetBI.
+     */
+    public long getDifficultyTarget() {
+        return difficultyTarget;
+    }
+
+    void setDifficultyTarget(long compactForm) {
+        this.difficultyTarget = compactForm;
+        this.hash = null;
+    }
+
+    /**
+     * Returns the nonce, an arbitrary value that exists only to make the hash of the block header fall below the
+     * difficulty target.
+     */
+    public long getNonce() {
+        return nonce;
+    }
+
+    void setNonce(long nonce) {
+        this.nonce = nonce;
+        this.hash = null;
+    }
 
 }
