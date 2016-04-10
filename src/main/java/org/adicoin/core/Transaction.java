@@ -92,25 +92,53 @@ public class Transaction extends Message implements Serializable {
  *
  */
 class TransactionOutpoint extends Message implements Serializable {
+    private static final long serialVersionUID = -8579790865702290101L;
 
-	public TransactionOutpoint(AdiCoinNetworkConfig config) {
-		super(config);
-		// TODO Auto-generated constructor stub
-	}
+    HashAsBinary txHash;
+    long outputIndex;
+    
+    Transaction sourceTx;
+    
+    
+    TransactionOutpoint(AdiCoinNetworkConfig params, long outputIndex, Transaction sourceTx) throws ProtocolException {
+        super(params);
+        if(sourceTx != null) {
+            this.sourceTx = sourceTx;
+            this.txHash = sourceTx.getHash();
+        } 
+        this.outputIndex = outputIndex;
+    }
 
-	@Override
-	void serializeToStream(ByteArrayOutputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
+    TransactionOutpoint(AdiCoinNetworkConfig config, byte[] payload, int offset) throws ProtocolException {
+        super(config, payload, offset);
+    }
 
-	@Override
-	void parse() throws ProtocolException {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    void parse() throws ProtocolException {
+        txHash = readHash();
+        outputIndex = readUint32();
+    }
 
-
+    @Override
+    void serializeToStream(ByteArrayOutputStream stream) throws IOException {
+        stream.write(Utils.reverseBytes(txHash.getBytes()));
+        Utils.uint32ToByteStreamLE(outputIndex, stream);
+    }
+    
+    TransactionOutput getConnectedOutput() {
+        if (sourceTx == null) return null;
+        return sourceTx.outputs.get((int)outputIndex);
+    }
+    
+    /* Methods to get the most important parts of the Source TX that are required to redeem */
+    byte[] getConnectedPubKeyScript() {
+        byte[] result = getConnectedOutput().getScriptBytes();
+        return result;
+    }
+    
+    byte[] getConnectedPubKeyHash() throws ScriptException {
+        return getConnectedOutput().getScriptPubKey().getPubKeyHash();
+    }
 }
 
 
@@ -175,5 +203,10 @@ class TransactionOutput extends Message implements Serializable {
 		return scriptBytes;
 	}
 
+	public CoinScript getScriptPubKey() throws ScriptException {
+		if (scriptPubKey == null)
+			scriptPubKey = new CoinScript(config, scriptBytes, 0, scriptBytes.length);
+		return scriptPubKey;
+	}
 
 }
