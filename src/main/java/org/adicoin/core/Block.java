@@ -3,11 +3,11 @@ package org.adicoin.core;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-public class PlainBlock extends Message {
+public class Block extends Message {
 
 	private static final long serialVersionUID = -2497440265918156052L;
 
-	public PlainBlock(AdiCoinNetworkConfig config) {
+	public Block(AdiCoinNetworkConfig config) {
 		super(config);
 	}
 

@@ -15,7 +15,7 @@ public class AdiCoinNetworkConfig implements Serializable {
 	
     public static final int COIN_PROTOCOL_VERSION = 31800;
     public int port;
-    public PlainBlock genesisBlock;
+    public Block genesisBlock;
     public BigInteger proofOfWorkLowerBound;
     
     /** Header magic bytes to identify the start of a coin network packet */
