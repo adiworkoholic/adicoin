@@ -8,7 +8,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,47 +115,65 @@ class TransactionOutpoint extends Message implements Serializable {
 
 
 class TransactionInput extends Message implements Serializable {
-	
+
 	private static final long serialVersionUID = 5538762740537115975L;
+
+	byte[] scriptBytes;
+	transient private CoinScript scriptSig;
+	Transaction parentTransaction;
+	TransactionOutpoint outpoint;
+
 	public TransactionInput(AdiCoinNetworkConfig config) {
 		super(config);
-		// TODO Auto-generated constructor stub
-	}
-
-
-	@Override
-	void serializeToStream(ByteArrayOutputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	void parse() throws ProtocolException {
 		// TODO Auto-generated method stub
-		
-	}
-	
 
+	}
+
+	@Override
+	void serializeToStream(ByteArrayOutputStream stream) {
+		// TODO Auto-generated method stub
+
+	}
 }
 
 class TransactionOutput extends Message implements Serializable {
-    public TransactionOutput(AdiCoinNetworkConfig config) {
-		super(config);
-		// TODO Auto-generated constructor stub
-	}
 	private static final Logger log = LoggerFactory.getLogger(TransactionOutput.class);
 	private static final long serialVersionUID = 6764754488001030219L;
-	@Override
-	void serializeToStream(ByteArrayOutputStream stream) throws IOException {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
-	void parse() throws ProtocolException {
-		// TODO Auto-generated method stub
-		
+
+	private BigInteger value;
+	private byte[] scriptBytes;
+	private transient CoinScript scriptPubKey;
+
+	Transaction parentTransaction;
+
+	private AdiCoinNetworkConfig config;
+
+	TransactionOutput(AdiCoinNetworkConfig config, byte[] msg, int offset) throws ProtocolException {
+		super(config, msg, offset);
 	}
 
+	TransactionOutput(AdiCoinNetworkConfig config) {
+		super(config);
+	}
+
+	@Override
+	void parse() throws ProtocolException {
+
+	}
+
+	@Override
+	void serializeToStream(ByteArrayOutputStream stream) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public byte[] getScriptBytes() {
+		return scriptBytes;
+	}
 
 
 }
