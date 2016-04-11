@@ -2,6 +2,8 @@ package org.adicoin.core;
 
 public class BlockStoreException extends Exception {
 
+	private static final long serialVersionUID = -4451007562282650321L;
+
 	BlockStoreException() {
 		super();
 		// TODO Auto-generated constructor stub

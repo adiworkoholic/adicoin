@@ -31,6 +31,8 @@ public class Connection {
         
         out = socket.getOutputStream();
         in = socket.getInputStream();
+        
+        // TODO: Implement the Protocol Handshake
 	}
 
 }

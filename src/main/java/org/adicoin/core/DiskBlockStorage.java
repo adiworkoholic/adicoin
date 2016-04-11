@@ -35,7 +35,7 @@ public class DiskBlockStorage implements BlockStorage {
     
     
     private void load(File file) throws IOException, BlockStoreException {
-    	
+    	//TODO: Load persisted blocks from file to the in-memory blockMap
     }
 
     private void createNewStore(AdiCoinNetworkConfig config, File file) throws BlockStoreException {
@@ -68,7 +68,7 @@ public class DiskBlockStorage implements BlockStorage {
 	}
 
 	@Override
-	public void setChainHead(PersistedBlock chainHead) throws BlockStoreException {
+	public synchronized void setChainHead(PersistedBlock chainHead) throws BlockStoreException {
 		 try {
 	            this.chainHead = chainHead.getHeader().getHash();
 	            // Write out new hash to the first 32 bytes of the file past one (first byte is version number).
