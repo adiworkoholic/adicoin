@@ -17,8 +17,8 @@ public class Block extends Message {
     public static final int BLOCK_HEADER_SIZE = 80;
 
     private long version;
-    private HashAsBinary prevBlockHash;
-    private HashAsBinary merkleRoot;
+    private Sha256Hash prevBlockHash;
+    private Sha256Hash merkleRoot;
     private long time;
     private long difficultyTarget;  // "nBits"
 
@@ -26,7 +26,7 @@ public class Block extends Message {
 
     List<Transaction> transactions; // null indicates that it currently only holders the block header
     
-    private transient HashAsBinary hash; // Hash of this block
+    private transient Sha256Hash hash; // Hash of this block
     
 	public Block(AdiCoinNetworkConfig config) {
 		super(config);
@@ -53,7 +53,7 @@ public class Block extends Message {
     /**
      * Returns the hash of the block (which for a valid, solved block should be below the target). Big endian.
      */
-    public HashAsBinary getHash() {
+    public Sha256Hash getHash() {
         if (hash == null)
             hash = calculateBlockHash();
         return hash;
@@ -100,12 +100,12 @@ public class Block extends Message {
     		verifyMerkleRoot();
     	}
     }
-	private HashAsBinary calculateBlockHash() {
+	private Sha256Hash calculateBlockHash() {
     	throw new RuntimeException("Not Implemented Yet!");
 
 	}
 	
-	private HashAsBinary calculateMerkleRoot() {
+	private Sha256Hash calculateMerkleRoot() {
     	throw new RuntimeException("Not Implemented Yet!");
 	}
 	
@@ -126,7 +126,7 @@ public class Block extends Message {
     
     /* Getters and Setters */
     /** Returns the merkle root in big endian form, calculating it from transactions if necessary. */
-    public HashAsBinary getMerkleRoot() {
+    public Sha256Hash getMerkleRoot() {
         if (merkleRoot == null)
             merkleRoot = calculateMerkleRoot();
         return merkleRoot;
@@ -138,11 +138,11 @@ public class Block extends Message {
     }
 
     /** Returns the hash of the previous block in the chain, as defined by the block header. */
-    public HashAsBinary getPrevBlockHash() {
+    public Sha256Hash getPrevBlockHash() {
         return prevBlockHash;
     }
 
-    void setPrevBlockHash(HashAsBinary prevBlockHash) {
+    void setPrevBlockHash(Sha256Hash prevBlockHash) {
         this.prevBlockHash = prevBlockHash;
         this.hash = null;
     }

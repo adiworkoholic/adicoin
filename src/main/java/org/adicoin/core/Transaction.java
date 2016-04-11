@@ -38,7 +38,7 @@ public class Transaction extends Message implements Serializable {
 	ArrayList<TransactionOutput> outputs;
     long lockTime;
 
-    transient HashAsBinary txHash;
+    transient Sha256Hash txHash;
 
 
 	
@@ -59,10 +59,10 @@ public class Transaction extends Message implements Serializable {
         return Collections.unmodifiableList(inputs);
     }
     
-    public HashAsBinary getHash() {
+    public Sha256Hash getHash() {
         if (txHash == null) {
             byte[] bits = serialize();
-            txHash = new HashAsBinary(Utils.reverseBytes(Utils.doubleSHA256Digest(bits)));
+            txHash = new Sha256Hash(Utils.reverseBytes(Utils.doubleSHA256Digest(bits)));
         }
         return txHash;
     }
@@ -94,7 +94,7 @@ public class Transaction extends Message implements Serializable {
 class TransactionOutpoint extends Message implements Serializable {
     private static final long serialVersionUID = -8579790865702290101L;
 
-    HashAsBinary txHash;
+    Sha256Hash txHash;
     long outputIndex;
     
     Transaction sourceTx;

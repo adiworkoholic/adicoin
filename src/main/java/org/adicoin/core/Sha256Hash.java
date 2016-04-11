@@ -11,26 +11,26 @@ import org.bouncycastle.util.encoders.Hex;
  * @author aditya
  *
  */
-public class HashAsBinary implements Serializable {
+public class Sha256Hash implements Serializable {
 
 	private static final long serialVersionUID = 6174903623608575112L;
 	
     private byte[] bytes;
 
-    public HashAsBinary(byte[] bytes) {
+    public Sha256Hash(byte[] bytes) {
         assert bytes.length == 32;
         this.bytes = bytes;
     }
 
-    public HashAsBinary(String string) {
+    public Sha256Hash(String string) {
         assert string.length() == 64;
         this.bytes = Hex.decode(string);
     }
 
     @Override
     public boolean equals(Object other) {
-        if (!(other instanceof HashAsBinary)) return false;
-        return Arrays.equals(bytes, ((HashAsBinary)other).bytes);
+        if (!(other instanceof Sha256Hash)) return false;
+        return Arrays.equals(bytes, ((Sha256Hash)other).bytes);
     }
     
     @Override

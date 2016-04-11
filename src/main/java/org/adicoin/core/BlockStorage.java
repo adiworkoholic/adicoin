@@ -7,7 +7,7 @@ package org.adicoin.core;
 public interface BlockStorage {
 	
     void put(PersistedBlock block) throws BlockStoreException;
-    PersistedBlock get(HashAsBinary hash) throws BlockStoreException;
+    PersistedBlock get(Sha256Hash hash) throws BlockStoreException;
     
     /* represents the top of the chain of greatest total work.*/
     PersistedBlock getChainHead() throws BlockStoreException;
