@@ -10,13 +10,6 @@ BlockChain, the underlying technology now gets the much deserved attention in re
 
 
 
-
-
-
-
-
-
-
-
 Learning bitcoin through Java - Thanks bitcoinj !
-This learning is heavily inspired by bitcoinj.
+
+ This is more of a learning exercise while reading through bitcoin developer documentation.
